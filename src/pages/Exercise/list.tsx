@@ -7,8 +7,8 @@ import {
   ShowButton,
   MarkdownField,
   BooleanField,
-  DateField,
-  DeleteButton,
+  ImageField,
+  DateField, DeleteButton,
 } from "@refinedev/antd";
 import { Table, Space } from "antd";
 
@@ -40,6 +40,24 @@ export const ExerciseList: React.FC<IResourceComponentsProps> = () => {
         <Table.Column dataIndex="topP" title="Top P" />
         <Table.Column dataIndex="frequencyPenalty" title="Frequency Penalty" />
         <Table.Column dataIndex="presencePenalty" title="Presence Penalty" />
+        <Table.Column
+          dataIndex={["feelingImage"]}
+          title="Feeling Image"
+          render={(value: any) => (
+            <ImageField style={{ maxWidth: "100px" }} value={value} />
+          )}
+        />
+        <Table.Column
+          dataIndex={["journeyImage"]}
+          title="Journey Image"
+          render={(value: any) => (
+            <ImageField style={{ maxWidth: "100px" }} value={value} />
+          )}
+        />
+        <Table.Column dataIndex="displayName" title="Display Name" />
+        <Table.Column dataIndex="shortDescription" title="Short Description" />
+        <Table.Column dataIndex="longDescription" title="Long Description" />
+        <Table.Column dataIndex="displayOrder" title="Display Order" />
         <Table.Column
           dataIndex={["createdAt"]}
           title="Created At"

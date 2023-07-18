@@ -1,20 +1,46 @@
 import type { AuthBindings } from "@refinedev/core";
 import { provider } from "./App";
+import jwt_decode from "jwt-decode";
 
 const authProvider: AuthBindings = {
   login: async ({ email, password }) => {
     const res = await provider.custom({
-      url: `${process.env.REACT_APP_API_URL!}/login`,
+      url: `${process.env.REACT_APP_API_URL!}/api/users/login`,
       method: "post",
       payload: { email, password },
     });
-    if (res.data && res.data.role === "ADMIN") {
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data));
-      return {
-        success: true,
-        redirectTo: "/",
-      };
+
+    if (res.data.token) {
+      try {
+        const { userId, role } = jwt_decode<{ userId: string; role: string }>(res.data.token);
+
+        console.log(userId, role);
+
+        if (role !== "admin") {
+          return {
+            success: false,
+            error: {
+              message: "Login Error",
+              name: "Invalid email or password",
+            },
+          };
+        }
+
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify({ userId, role }));
+        return {
+          success: true,
+          redirectTo: "/",
+        };
+      } catch (error) {
+        return {
+          success: false,
+          error: {
+            message: "Login Error",
+            name: "Invalid token",
+          },
+        };
+      }
     } else {
       return {
         success: false,

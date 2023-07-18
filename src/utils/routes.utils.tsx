@@ -57,6 +57,17 @@ export const getRoutes = () => {
       >
         <Route path="/login" element={<AuthPage type="login" />} />
       </Route>
+      <Route
+        element={
+          <Authenticated fallback={<Outlet />}>
+            <ThemedLayoutV2>
+              <Outlet />
+            </ThemedLayoutV2>
+          </Authenticated>
+        }
+      >
+        <Route path="*" element={<ErrorComponent />} />
+      </Route>
     </Routes>
   );
 };

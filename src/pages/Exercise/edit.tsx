@@ -1,7 +1,7 @@
 import React from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
-import { Edit, useForm } from "@refinedev/antd";
-import { Form, Input, Checkbox, DatePicker } from "antd";
+import { Edit, useForm, getValueFromEvent } from "@refinedev/antd";
+import { Form, Input, Checkbox, Upload, DatePicker } from "antd";
 import dayjs from "dayjs";
 
 export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
@@ -10,7 +10,7 @@ export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
   const exerciseData = queryResult?.data?.data;
 
   return (
-    <Edit saveButtonProps={saveButtonProps}>
+    <Edit saveButtonProps={saveButtonProps} canDelete={true}>
       <Form {...formProps} layout="vertical">
         <Form.Item
           label="Id"
@@ -115,6 +115,88 @@ export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
         <Form.Item
           label="Presence Penalty"
           name={["presencePenalty"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item label="Feeling Image">
+          <Form.Item
+            name="feelingImage"
+            getValueProps={(value) => ({
+              fileList: [{ url: value, name: value, uid: value }],
+            })}
+            getValueFromEvent={getValueFromEvent}
+            noStyle
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Upload.Dragger listType="picture" beforeUpload={() => false}>
+              <p className="ant-upload-text">Drag & drop a file in this area</p>
+            </Upload.Dragger>
+          </Form.Item>
+        </Form.Item>
+        <Form.Item label="Journey Image">
+          <Form.Item
+            name="journeyImage"
+            getValueProps={(value) => ({
+              fileList: [{ url: value, name: value, uid: value }],
+            })}
+            getValueFromEvent={getValueFromEvent}
+            noStyle
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Upload.Dragger listType="picture" beforeUpload={() => false}>
+              <p className="ant-upload-text">Drag & drop a file in this area</p>
+            </Upload.Dragger>
+          </Form.Item>
+        </Form.Item>
+        <Form.Item
+          label="Display Name"
+          name={["displayName"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Short Description"
+          name={["shortDescription"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Long Description"
+          name={["longDescription"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="Display Order"
+          name={["displayOrder"]}
           rules={[
             {
               required: true,

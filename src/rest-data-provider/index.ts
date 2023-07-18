@@ -14,7 +14,7 @@ export const dataProvider = (
   "createMany" | "updateMany" | "deleteMany"
 > => ({
   getList: async ({ resource, pagination, filters, sorters, meta }) => {
-    const url = `${apiUrl}/${resource}`;
+    const url = `${apiUrl}/api/${resource}`;
 
     const { current = 1, pageSize = 10, mode = "server" } = pagination ?? {};
 
@@ -62,7 +62,7 @@ export const dataProvider = (
     const requestMethod = (method as MethodTypes) ?? "get";
 
     const { data } = await httpClient[requestMethod](
-      `${apiUrl}/${resource}?${stringify({ id: ids })}`,
+      `${apiUrl}/api/${resource}?${stringify({ id: ids })}`,
       { headers }
     );
 
@@ -72,7 +72,7 @@ export const dataProvider = (
   },
 
   create: async ({ resource, variables, meta }) => {
-    const url = `${apiUrl}/${resource}`;
+    const url = `${apiUrl}/api/${resource}`;
 
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypesWithBody) ?? "post";
@@ -87,7 +87,7 @@ export const dataProvider = (
   },
 
   update: async ({ resource, id, variables, meta }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
+    const url = `${apiUrl}/api/${resource}/${id}`;
 
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypesWithBody) ?? "patch";
@@ -102,7 +102,7 @@ export const dataProvider = (
   },
 
   getOne: async ({ resource, id, meta }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
+    const url = `${apiUrl}/api/${resource}/${id}`;
 
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypes) ?? "get";
@@ -115,7 +115,7 @@ export const dataProvider = (
   },
 
   deleteOne: async ({ resource, id, variables, meta }) => {
-    const url = `${apiUrl}/${resource}/${id}`;
+    const url = `${apiUrl}/api/${resource}/${id}`;
 
     const { headers, method } = meta ?? {};
     const requestMethod = (method as MethodTypesWithBody) ?? "delete";

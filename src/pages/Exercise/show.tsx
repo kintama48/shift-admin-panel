@@ -3,6 +3,7 @@ import { IResourceComponentsProps, useShow } from "@refinedev/core";
 import {
   BooleanField,
   DateField,
+  ImageField,
   MarkdownField,
   NumberField,
   Show,
@@ -40,6 +41,18 @@ export const ExerciseShow: React.FC<IResourceComponentsProps> = () => {
       <NumberField value={record?.frequencyPenalty ?? ""} />
       <Title level={5}>Presence Penalty</Title>
       <NumberField value={record?.presencePenalty ?? ""} />
+      <Title level={5}>Feeling Image</Title>
+      <ImageField style={{ maxWidth: 200 }} value={record?.feelingImage} />
+      <Title level={5}>Journey Image</Title>
+      <ImageField style={{ maxWidth: 200 }} value={record?.journeyImage} />
+      <Title level={5}>Display Name</Title>
+      <TextField value={record?.displayName} />
+      <Title level={5}>Short Description</Title>
+      <TextField value={record?.shortDescription} />
+      <Title level={5}>Long Description</Title>
+      <TextField value={record?.longDescription} />
+      <Title level={5}>Display Order</Title>
+      <NumberField value={record?.displayOrder ?? ""} />
       <Title level={5}>Created At</Title>
       <DateField value={record?.createdAt} />
       <Title level={5}>Updated At</Title>

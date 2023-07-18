@@ -7,7 +7,8 @@ import routerBindings, {
   DocumentTitleHandler,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router-v6";
-import dataProvider from "@refinedev/simple-rest";
+// import dataProvider from "@refinedev/simple-rest";
+import {dataProvider} from "./rest-data-provider";
 import { BrowserRouter } from "react-router-dom";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { getRoutes } from "./utils/routes.utils";
@@ -21,10 +22,10 @@ function App() {
     <BrowserRouter>
       <ColorModeContextProvider>
         <Refine
+          authProvider={authProvider}
           notificationProvider={notificationProvider}
           routerProvider={routerBindings}
           dataProvider={provider}
-          authProvider={authProvider}
           options={{
             syncWithLocation: true,
             warnWhenUnsavedChanges: true,
