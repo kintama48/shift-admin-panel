@@ -10,8 +10,6 @@ const authProvider: AuthBindings = {
       payload: { email, password },
     });
 
-    console.log("HEREEEEEEEEEEEE");
-
     if (res.data.token) {
       try {
         const { userId, role } = jwt_decode<{ userId: string; role: string }>(res.data.token);
