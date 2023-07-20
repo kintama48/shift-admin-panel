@@ -17,9 +17,10 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
-    if (error.status === 401) {
+    if (error.response.status === 401) {
       localStorage.clear();
       window.location.href = "/login";
+      return;
     }
     return Promise.reject(error);
   }
@@ -30,6 +31,11 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response.status === 401) {
+      localStorage.clear();
+      window.location.href = "/login";
+      return;
+    }
     const customError: HttpError = {
       ...error,
       message: error.response?.data?.message,
