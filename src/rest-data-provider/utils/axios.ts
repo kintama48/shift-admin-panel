@@ -17,6 +17,10 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    if (error.status === 401) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
     return Promise.reject(error);
   }
 );
