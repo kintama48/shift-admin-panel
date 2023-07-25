@@ -1,28 +1,75 @@
-import React from "react";
+import React, { useState } from "react";
 import { IResourceComponentsProps } from "@refinedev/core";
 import { Edit, useForm, getValueFromEvent } from "@refinedev/antd";
-import { Form, Input, Checkbox, Upload, DatePicker } from "antd";
+import {
+  Form,
+  Input,
+  Checkbox,
+  Upload,
+  DatePicker,
+  Select,
+  InputNumber,
+} from "antd";
 import dayjs from "dayjs";
+import { uploadToPresignedUrl } from "../../utils/upload.utils";
+import { cleanUrl, getSignedUrl } from "../../utils/getUrl";
+import { provider } from "../../App";
 
 export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps, queryResult } = useForm();
 
   const exerciseData = queryResult?.data?.data;
 
+  const customUpload = async (url: string, file: File) => {
+    try {
+      return await uploadToPresignedUrl(url, file);
+    } catch (error) {
+      console.log(error);
+      window.location.href = "/exercise";
+    }
+  };
+
+  const [feelingFile, setFeelingFile] = useState();
+  const [journeyFile, setJourneyFile] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const onFeelingChange = ({ file }: any) => {
+    setFeelingFile(file);
+  };
+
+  const onJourneyChange = ({ file }: any) => {
+    setJourneyFile(file);
+  };
+
+  const handleSubmit = async (values: any) => {
+    setLoading(true);
+    try {
+      const feelingUrl = await customUpload(await getSignedUrl(), feelingFile!); // Call upload here
+      const journeyUrl = await customUpload(await getSignedUrl(), journeyFile!); // Call upload here
+
+      const payload = {
+        ...values,
+        feelingImage: cleanUrl(feelingUrl!.url!),
+        journeyImage: cleanUrl(journeyUrl!.url!),
+      };
+
+      await provider.custom({
+        url: `${process.env.REACT_APP_API_URL}/api/exercise`,
+        method: "post",
+        payload: payload,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+    setLoading(false);
+    // reset form fields and navigate to homepage
+    formProps.form!.resetFields();
+    window.location.href = "/exercise";
+  };
+
   return (
     <Edit saveButtonProps={saveButtonProps} canDelete={true}>
-      <Form {...formProps} layout="vertical">
-        <Form.Item
-          label="Id"
-          name={["id"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input readOnly disabled />
-        </Form.Item>
+      <Form {...formProps} layout="vertical" onFinish={handleSubmit}>
         <Form.Item
           label="Name"
           name={["name"]}
@@ -66,7 +113,12 @@ export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input />
+          <Select>
+            <Select.Option value="gpt-3.5-turbo">GPT-3.5-Turbo</Select.Option>
+            <Select.Option value="gpt-3.5-turbo-0301">
+              GPT-3.5-Turbo-0301
+            </Select.Option>
+          </Select>
         </Form.Item>
         <Form.Item
           label="Temperature"
@@ -74,92 +126,91 @@ export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
           rules={[
             {
               required: true,
+              type: "number",
+              min: 0,
+              max: 2,
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
+
         <Form.Item
           label="Max Length"
           name={["maxLength"]}
           rules={[
             {
               required: true,
+              type: "number",
+              min: 1,
+              max: 2048,
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
+
         <Form.Item
           label="Top P"
           name={["topP"]}
           rules={[
             {
               required: true,
+              type: "number",
+              min: 0,
+              max: 1,
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
+
         <Form.Item
           label="Frequency Penalty"
           name={["frequencyPenalty"]}
           rules={[
             {
               required: true,
+              type: "number",
+              min: 0,
+              max: 2,
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
+
         <Form.Item
           label="Presence Penalty"
           name={["presencePenalty"]}
           rules={[
             {
               required: true,
+              type: "number",
+              min: 0,
+              max: 2,
             },
           ]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
         <Form.Item label="Feeling Image">
-          <Form.Item
-            name="feelingImage"
-            getValueProps={(value) => ({
-              fileList: [{ url: value, name: value, uid: value }],
-            })}
-            getValueFromEvent={getValueFromEvent}
-            noStyle
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+          <Upload.Dragger
+            listType="picture-card"
+            beforeUpload={() => false}
+            onChange={onFeelingChange}
           >
-            <Upload.Dragger listType="picture" beforeUpload={() => false}>
-              <p className="ant-upload-text">Drag & drop a file in this area</p>
-            </Upload.Dragger>
-          </Form.Item>
+            <p className="ant-upload-text">Drag & drop a file in this area</p>
+          </Upload.Dragger>
         </Form.Item>
         <Form.Item label="Journey Image">
-          <Form.Item
-            name="journeyImage"
-            getValueProps={(value) => ({
-              fileList: [{ url: value, name: value, uid: value }],
-            })}
-            getValueFromEvent={getValueFromEvent}
-            noStyle
-            rules={[
-              {
-                required: true,
-              },
-            ]}
+          <Upload.Dragger
+            onChange={onJourneyChange}
+            listType="picture-card"
+            beforeUpload={() => false}
           >
-            <Upload.Dragger listType="picture" beforeUpload={() => false}>
-              <p className="ant-upload-text">Drag & drop a file in this area</p>
-            </Upload.Dragger>
-          </Form.Item>
+            <p className="ant-upload-text">Drag & drop a file in this area</p>
+          </Upload.Dragger>
         </Form.Item>
         <Form.Item
           label="Display Name"
@@ -203,35 +254,7 @@ export const ExerciseEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Created At"
-          name={["createdAt"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          getValueProps={(value) => ({
-            value: value ? dayjs(value) : undefined,
-          })}
-        >
-          <DatePicker />
-        </Form.Item>
-        <Form.Item
-          label="Updated At"
-          name={["updatedAt"]}
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          getValueProps={(value) => ({
-            value: value ? dayjs(value) : undefined,
-          })}
-        >
-          <DatePicker />
+          <InputNumber />
         </Form.Item>
       </Form>
     </Edit>

@@ -1,0 +1,126 @@
+Transcript Schema:
+    Student:
+        id
+        name
+        cnic
+
+    Instructor:
+        id
+        name
+        cnic
+
+    Course:
+        course_code
+        department_code
+        credit_hours
+        description
+        date_created
+
+    Department:
+        department_code
+        name
+        description
+
+    CourseInstructors:
+        id
+        course_code
+        instructor_id
+
+    StudentCourses:
+        id
+        course_code
+        student_id
+        credit_hours_earned
+        credit_hours_enrolled
+        grade_character
+        grade_point
+        semester
+        year
+        start_date
+        end_date
+
+    Grades:
+        grade_character
+        max_grade_point
+
+
+Instagram:
+    User:
+        user_id
+        email
+        password
+        account_type
+        account_creation_method
+        is_private
+        is_verified
+        created_at
+        modified_at
+
+    Profile:
+        profile_id
+        user_id
+        username
+        display_name
+        bio
+        avatar_url
+        header_url
+        posts_count
+        ProfilePosts[]
+        created_at
+        modified_at
+
+    Post:
+        post_id
+        caption
+        PostAssets[]
+        PostTags[]
+        created_at
+        modified_at
+
+    PostAssets:
+        post_id
+        asset_id
+        created_at
+        modified_at
+
+    PostTags:
+        post_id
+        profile_id
+
+    ProfilePost:
+        profile_id
+        post_id
+        created_at
+        modified_at
+
+    Like: // add event listeners. make a webhook that sends a notification to the user when someone likes their post
+        id
+        profile_id
+        Post
+        created_at
+        modified_at
+
+    Comment: // add event listeners. make a webhook that sends a notification to the user when someone comments on their post
+        id
+        Post
+        profile_id
+        comment
+        created_at
+        modified_at
+
+    Asset:
+        id
+        post_id
+        url
+        type (image/jpeg, image/png, video/mp4, video/webp, audio/mpeg, audio/webm, audio/ogg, audio/wav, audio/flac, audio/aac, audio/mp3, audio/opus, audio/m4a, audio/x-m4a, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav, audio/x-flac, audio/x-aac, audio/x-mp3, audio/x-opus, audio/x-mpeg, audio/x-webm, audio/x-ogg, audio/x-wav)
+        created_at
+        modified_at
+
+
+    Follow:
+        id
+        follower_id
+        following_id
+        created_at
+        modified_at
+

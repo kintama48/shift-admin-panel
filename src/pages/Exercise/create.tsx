@@ -4,6 +4,7 @@ import { Create, useForm } from "@refinedev/antd";
 import { Checkbox, Form, Input, InputNumber, Select, Upload } from "antd";
 import { provider } from "../../App";
 import { cleanUrl, getSignedUrl } from "../../utils/getUrl";
+import {uploadToPresignedUrl} from "../../utils/upload.utils";
 
 export const ExerciseCreate: React.FC<IResourceComponentsProps> = () => {
   const { formProps, saveButtonProps, queryResult } = useForm();
@@ -22,22 +23,7 @@ export const ExerciseCreate: React.FC<IResourceComponentsProps> = () => {
 
   const customUpload = async (url: string, file: File) => {
     try {
-      const res = await fetch(url, {
-        method: "PUT",
-        body: file, // upload the actual file data
-      });
-      if (res.ok) {
-        // Return the response in the format that Ant Design's Upload component expects
-        return {
-          url: res.url,
-        };
-      } else {
-        // Handle upload error
-        return {
-          status: "error",
-          response: { message: "Upload failed" },
-        };
-      }
+      return await uploadToPresignedUrl(url, file);
     } catch (error) {
       console.log(error);
       window.location.href = "/exercise";
